@@ -44,7 +44,7 @@ func StringSum(input string) (output string, err error) {
 	}
 	for _, sumItem := range strings.Split(input, "+") {
 		for i, item := range strings.Split(sumItem, "-") {
-			trim := strings.TrimSpace(item)
+			trim := strings.ReplaceAll(strings.TrimSpace(item), " ", "")
 			value, err := strconv.ParseInt(trim, 10, 64)
 			if err != nil {
 				if len(trim) < 1 {
