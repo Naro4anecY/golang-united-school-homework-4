@@ -14,6 +14,9 @@ type MyError struct {
 func (e MyError) Error() string {
 	return e.Message
 }
+func (e MyError) Unwrap() error {
+	return fmt.Errorf("error")
+}
 
 //use these errors as appropriate, wrapping them with fmt.Errorf function
 var (
