@@ -1,8 +1,19 @@
-package string_sum
+package main
 
 import (
 	"errors"
+	"fmt"
+	"strconv"
+	"strings"
 )
+
+type MyError struct {
+	Message string
+}
+
+func (e MyError) Error() string {
+	return e.Message
+}
 
 //use these errors as appropriate, wrapping them with fmt.Errorf function
 var (
@@ -23,5 +34,32 @@ var (
 // Use the errors defined above as described, again wrapping into fmt.Errorf
 
 func StringSum(input string) (output string, err error) {
-	return "", nil
+	sum := int64(0)
+	sumCnt := 0
+	if len(strings.TrimSpace(input)) < 1 {
+		return "", fmt.Errorf("undef: %w", errorEmptyInput)
+	}
+	for _, sumItem := range strings.Split(input, "+") {
+		for i, item := range strings.Split(sumItem, "-") {
+			trim := strings.TrimSpace(item)
+			value, err := strconv.ParseInt(trim, 10, 64)
+			if err != nil {
+				if len(trim) < 1 {
+					continue
+				}
+				var err2 MyError = MyError{Message: err.Error()}
+				return "", fmt.Errorf("undef: %w", err2)
+			}
+			sumCnt += 1
+			if i > 0 {
+				sum -= value
+			} else {
+				sum += value
+			}
+		}
+	}
+	if sumCnt != 2 {
+		return "", fmt.Errorf("undef: %w", errorNotTwoOperands)
+	}
+	return strconv.FormatInt(sum, 10), nil
 }
